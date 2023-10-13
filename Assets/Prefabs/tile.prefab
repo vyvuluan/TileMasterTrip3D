@@ -197,7 +197,8 @@ GameObject:
   - component: {fileID: 6213641831516179549}
   - component: {fileID: 927359200}
   - component: {fileID: 927359204}
-  m_Layer: 0
+  - component: {fileID: 8958373425967365165}
+  m_Layer: 6
   m_Name: tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,6 +301,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.02, y: 0.018992648, z: 0.03593963}
   m_Center: {x: 0, y: 0.000503678, z: -0.007969815}
+--- !u!114 &8958373425967365165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5565242026651823496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9ec3b26e486c04da0124b1461edab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCol: {fileID: 927359204}
+  rb: {fileID: 927359200}
 --- !u!1 &6850159327765900963
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,18 +340,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6850159327765900963}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.86602545, w: 0.49999994}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2722833075623422939}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -120}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 133, y: 135}
+  m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1760668576670660261
 CanvasRenderer:
@@ -366,7 +381,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5dba7101d23a37d4e9152c4759fd1832, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f7cca84f232a849429f0635ebdb3e41b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

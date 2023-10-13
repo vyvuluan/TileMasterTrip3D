@@ -5,6 +5,21 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] private BoxCollider boxCol;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private TileType tileType;
+    private Vector3 startPos;
+    private Quaternion startQuaternion;
+    public TileType TileType { get => tileType; }
+
+    public void OnInit(TileType tileType)
+    {
+        this.tileType = tileType;
+    }
+    public void SetRollback(Vector3 startPos, Quaternion startQuaternion)
+    {
+        this.startPos = startPos;
+        this.startQuaternion = startQuaternion;
+    }
+
     public void Collect(Transform tf)
     {
         Vector3 temp = tf.position;
@@ -22,21 +37,19 @@ public class Tile : MonoBehaviour
 
         transform.DOScale(new Vector3(70f, newScaleY, newScaleZ), 0.5f);
     }
-    public void Back(Vector3 position)
+    public void Back()
     {
         boxCol.enabled = true;
         rb.isKinematic = false;
-        float tempY = position.y;
-        //boxCol.isTrigger = true;
-        transform.DOMoveY(position.y + 3f, 0.3f).OnComplete(() =>
+        float tempY = startPos.y;
+        transform.DOMoveY(startPos.y + 2f, 0.3f).OnComplete(() =>
         {
-            transform.DOMove(new(position.x, transform.position.y, position.z), 0.5f).OnComplete(() =>
+            transform.DOMove(new(startPos.x, transform.position.y, startPos.z), 0.5f).OnComplete(() =>
             {
                 transform.DOMoveY(tempY, 0.3f);
+                transform.DORotateQuaternion(startQuaternion, 0.1f);
             });
         });
-
-        //transform.DORotate(new(startTf.rotation.x, startTf.rotation.y, startTf.rotation.z), 0.5f);
 
         //calculator the scale ratio
         Vector3 initialScale = transform.localScale;

@@ -18,6 +18,9 @@ public class TileSpawner : MonoBehaviour
     private void SpawnTile(Vector3 position)
     {
         GameObject tileGo = SimplePool.Spawn(tilePrefab, position, tilePrefab.transform.rotation);
+
         tileGo.transform.SetParent(transform);
+        Tile tile = tileGo.GetComponent<Tile>();
+        tile.OnInit(TileType.TYPE2);
     }
 }

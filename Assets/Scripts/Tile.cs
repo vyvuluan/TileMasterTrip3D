@@ -30,12 +30,17 @@ public class Tile : MonoBehaviour
         transform.DORotate(new(-90f, -90f, 0), 0.5f);
 
         //calculator the scale ratio
+
+
+        transform.DOScale(CalculatorScaleX(70f), 0.5f);
+    }
+    private Vector3 CalculatorScaleX(float scale)
+    {
         Vector3 initialScale = transform.localScale;
         float scaleXRatio = 70f / initialScale.x;
         float newScaleY = initialScale.y * scaleXRatio;
         float newScaleZ = initialScale.z * scaleXRatio;
-
-        transform.DOScale(new Vector3(70f, newScaleY, newScaleZ), 0.5f);
+        return new Vector3(scale, newScaleY, newScaleZ);
     }
     public void Back()
     {
@@ -51,12 +56,16 @@ public class Tile : MonoBehaviour
             });
         });
 
-        //calculator the scale ratio
-        Vector3 initialScale = transform.localScale;
-        float scaleXRatio = 90f / initialScale.x;
-        float newScaleY = initialScale.y * scaleXRatio;
-        float newScaleZ = initialScale.z * scaleXRatio;
 
-        transform.DOScale(new Vector3(90f, newScaleY, newScaleZ), 0.5f);
+
+        transform.DOScale(CalculatorScaleX(90f), 0.5f);
+    }
+    public void AddForce(int force, Vector3 direction)
+    {
+        rb.AddForce(force * direction, ForceMode.Impulse);
+    }
+    public void OnDespawn()
+    {
+        SimplePool.Despawn(gameObject);
     }
 }

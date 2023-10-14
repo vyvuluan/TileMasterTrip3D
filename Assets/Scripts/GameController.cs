@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 public class GameController : MonoBehaviour
 {
@@ -10,12 +11,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private TileSpawner tileSpawner;
     [SerializeField] private List<Transform> slots;
     [SerializeField] private LayerMask layerMaskTile;
+    private bool canTouch;
     private RaycastHit hitInfo;
     private Dictionary<int, Tile> slotCurrentDics;
-
     public List<Tile> list = new();
     private void Awake()
     {
+        canTouch = true;
         slotCurrentDics = new();
         for (int i = 0; i < slots.Count; i++)
         {
@@ -24,14 +26,15 @@ public class GameController : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canTouch)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hitInfo, 100f, layerMaskTile))
             {
+                canTouch = false;
                 Tile tileTemp = hitInfo.collider.GetComponent<Tile>();
-                tileTemp.SetRollback(hitInfo.collider.transform.position, hitInfo.collider.transform.rotation);
+                tileTemp.SetRollback(hitInfo.collider.transform.position, hitInfo.collider.transform.rotation, SetCanTouch);
                 HandleCollectTile(tileTemp);
             }
         }
@@ -41,6 +44,7 @@ public class GameController : MonoBehaviour
             list.Add(item.Value);
         }
     }
+    public void SetCanTouch(bool canTouch) => this.canTouch = canTouch;
     public void HandleCollectTile(Tile tile)
     {
         if (slotCurrentDics[0] == null)
@@ -66,7 +70,6 @@ public class GameController : MonoBehaviour
     }
     public void MoveOneSlot(int index, Tile tile)
     {
-        Debug.Log(index);
         for (int j = slots.Count - 1; j > index; j--)
         {
             if (slotCurrentDics[j - 1] != null)
@@ -77,16 +80,16 @@ public class GameController : MonoBehaviour
         }
         slotCurrentDics[index] = tile;
         slotCurrentDics[index].Collect(slots[index]);
-
-        Match(index);
+        StartCoroutine(Match(index));
     }
-    public void Match(int index)
+    public IEnumerator Match(int index)
     {
         //match
         TileType tileType = slotCurrentDics[index].TileType;
-        if (slotCurrentDics[index + 1] == null || slotCurrentDics[index + 2] == null) return;
+        if (slotCurrentDics[index + 1] == null || slotCurrentDics[index + 2] == null) yield break;
         if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
         {
+            yield return new WaitForSeconds(0.4f);
             slotCurrentDics[index].OnDespawn();
             slotCurrentDics[index + 1].OnDespawn();
             slotCurrentDics[index + 2].OnDespawn();
@@ -98,7 +101,6 @@ public class GameController : MonoBehaviour
                 slotCurrentDics[i - 3] = slotCurrentDics[i];
                 slotCurrentDics[i] = null;
             }
-
         }
     }
     public void Back()

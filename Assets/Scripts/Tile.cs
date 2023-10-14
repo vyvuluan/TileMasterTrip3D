@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -6,6 +7,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private BoxCollider boxCol;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private TileType tileType;
+    private Action<bool> onChangeCanTouch;
     private Vector3 startPos;
     private Quaternion startQuaternion;
     public TileType TileType { get => tileType; }
@@ -14,10 +16,11 @@ public class Tile : MonoBehaviour
     {
         this.tileType = tileType;
     }
-    public void SetRollback(Vector3 startPos, Quaternion startQuaternion)
+    public void SetRollback(Vector3 startPos, Quaternion startQuaternion, Action<bool> onChangeCanTouch)
     {
         this.startPos = startPos;
         this.startQuaternion = startQuaternion;
+        this.onChangeCanTouch = onChangeCanTouch;
     }
 
     public void Collect(Transform tf)
@@ -26,12 +29,8 @@ public class Tile : MonoBehaviour
         temp.y = 0.3f;
         boxCol.enabled = false;
         rb.isKinematic = true;
-        transform.DOMove(temp, 1f);
+        transform.DOMove(temp, 0.5f).OnComplete(() => onChangeCanTouch?.Invoke(true));
         transform.DORotate(new(-90f, -90f, 0), 0.5f);
-
-        //calculator the scale ratio
-
-
         transform.DOScale(CalculatorScaleX(70f), 0.5f);
     }
     private Vector3 CalculatorScaleX(float scale)
@@ -55,9 +54,6 @@ public class Tile : MonoBehaviour
                 transform.DORotateQuaternion(startQuaternion, 0.1f);
             });
         });
-
-
-
         transform.DOScale(CalculatorScaleX(90f), 0.5f);
     }
     public void AddForce(int force, Vector3 direction)

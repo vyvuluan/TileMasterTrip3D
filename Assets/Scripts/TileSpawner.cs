@@ -11,7 +11,7 @@ public class TileSpawner : MonoBehaviour
         for (int i = 0; i < 30; i++)
         {
             Vector3 randomPosition = Random.insideUnitSphere * 5;
-            randomPosition.y = 5;
+            randomPosition.y = Random.Range(3, 8);
             SpawnTile(randomPosition);
         }
 

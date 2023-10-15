@@ -12,4 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a49f853cdb9eb489c2a7b71e200465, type: 3}
   m_Name: Map
   m_EditorClassIdentifier: 
-  maps: []
+  maps:
+  - mapName: map1
+    displayName: Level 1
+    level: 1
+    playTime: 400
+    mapDetails:
+    - id: 0
+      type: 1
+      sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
+      chance: 6
+    - id: 1
+      type: 2
+      sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
+      chance: 6
+    - id: 2
+      type: 3
+      sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
+      chance: 6
+    - id: 3
+      type: 4
+      sprite: {fileID: 21300000, guid: 6ee042c3f319cda4990f5f14a762ff7e, type: 3}
+      chance: 6
+  - mapName: map2
+    displayName: Level 2
+    level: 2
+    playTime: 400
+    mapDetails:
+    - id: 0
+      type: 1
+      sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
+      chance: 6
+    - id: 1
+      type: 2
+      sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
+      chance: 6
+    - id: 2
+      type: 3
+      sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
+      chance: 6
+    - id: 3
+      type: 4
+      sprite: {fileID: 21300000, guid: 6ee042c3f319cda4990f5f14a762ff7e, type: 3}
+      chance: 6
+    - id: 3
+      type: 5
+      sprite: {fileID: 21300000, guid: 4fa3527fa3505934092e0c83285ebdaa, type: 3}
+      chance: 6

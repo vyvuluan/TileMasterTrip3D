@@ -1,20 +1,23 @@
 using DG.Tweening;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
     [SerializeField] private BoxCollider boxCol;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private Image image;
     [SerializeField] private TileType tileType;
     private Action<bool> onChangeCanTouch;
     private Vector3 startPos;
     private Quaternion startQuaternion;
     public TileType TileType { get => tileType; }
 
-    public void OnInit(TileType tileType)
+    public void OnInit(TileType tileType, Sprite sprite)
     {
         this.tileType = tileType;
+        image.sprite = sprite;
     }
     public void SetRollback(Vector3 startPos, Quaternion startQuaternion, Action<bool> onChangeCanTouch)
     {

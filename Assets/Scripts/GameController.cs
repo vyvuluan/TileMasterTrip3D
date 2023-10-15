@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class GameController : MonoBehaviour
@@ -24,6 +25,10 @@ public class GameController : MonoBehaviour
             slotCurrentDics.Add(i, null);
         }
     }
+    private void Start()
+    {
+        StartCoroutine(Countdown(20));
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) && canTouch)
@@ -46,6 +51,21 @@ public class GameController : MonoBehaviour
         }
     }
     public void SetCanTouch(bool canTouch) => this.canTouch = canTouch;
+    protected IEnumerator Countdown(float time)
+    {
+        float currentTime = time;
+        while (currentTime > 0)
+        {
+            currentTime -= Time.deltaTime;
+            TimeSpan timeSpan = TimeSpan.FromSeconds(currentTime);
+
+            int minutes = timeSpan.Minutes;
+            int remainingSeconds = timeSpan.Seconds;
+            view.SetCountDownText(minutes, remainingSeconds);
+            yield return null;
+        }
+        Debug.Log("game over");
+    }
     public void HandleCollectTile(Tile tile)
     {
         if (slotCurrentDics[0] == null)
@@ -128,8 +148,6 @@ public class GameController : MonoBehaviour
             temp = tileSpawner.FindMatchingTiles(2);
             for (int i = 0; i < slots.Count - 1; i++)
             {
-                Debug.Log(i);
-                // if(slotCurrentDics[i + 1] == null) break;
                 //2 tile same
                 if (slotCurrentDics[i + 1] != null && slotCurrentDics[i].TileType == slotCurrentDics[i + 1].TileType)
                 {
@@ -140,7 +158,6 @@ public class GameController : MonoBehaviour
         }
         for (int i = 0; i < temp.Count; i++)
         {
-            Debug.Log(temp[i].name);
             tileSpawner.RemoveTileFromTiles(temp[i]);
             HandleCollectTile(temp[i]);
         }

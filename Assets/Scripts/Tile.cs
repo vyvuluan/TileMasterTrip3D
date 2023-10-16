@@ -32,9 +32,9 @@ public class Tile : MonoBehaviour
         temp.y = 0.3f;
         boxCol.enabled = false;
         rb.isKinematic = true;
-        transform.DOMove(temp, 0.5f).OnComplete(() => onChangeCanTouch?.Invoke(true));
-        transform.DORotate(new(-90f, -90f, 0), 0.5f);
-        transform.DOScale(CalculatorScaleX(70f), 0.5f);
+        transform.DOMove(temp, 0.3f).OnComplete(() => onChangeCanTouch?.Invoke(true));
+        transform.DORotate(new(-90f, -90f, 0), 0.3f);
+        transform.DOScale(CalculatorScaleX(70f), 0.3f);
     }
     private Vector3 CalculatorScaleX(float scale)
     {

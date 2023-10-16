@@ -14,26 +14,23 @@ public class GameController : MonoBehaviour
     [SerializeField] private TileSpawner tileSpawner;
     [SerializeField] private List<Transform> slots;
     [SerializeField] private LayerMask layerMaskTile;
-    private bool canTouch;
     private int levelCurrent;
+    private int coinCurrent;
+    private int coinInLevel;
+    private bool canTouch = true;
     private RaycastHit hitInfo;
     private Dictionary<int, Tile> slotCurrentDics;
     public List<Tile> list = new();
+
+    #region Variable Combo
+    private int currentCombo = 0;
+    private float comboTime = 10f;
+    private float currentTimeRemaining;
+    #endregion
+
     private void Awake()
     {
-        canTouch = true;
-        levelCurrent = PlayerPrefs.GetInt(Constants.LevelPlayerPrefs, 1);
-        Debug.Log(levelCurrent);
-        MapConfig mapConfig = model.MapConfig.Maps[levelCurrent - 1];
-        view.SetLevelText(mapConfig.DisplayName);
-        tileSpawner.Initialized(mapConfig.MapDetails);
-        slotCurrentDics = new();
-        for (int i = 0; i < slots.Count; i++)
-        {
-            slotCurrentDics.Add(i, null);
-        }
-        StartCoroutine(Countdown(mapConfig.PlayTime));
-
+        Initialized();
     }
     private void Update()
     {
@@ -50,7 +47,6 @@ public class GameController : MonoBehaviour
                 HandleCollectTile(tileTemp);
                 if (tileSpawner.CheckWin())
                 {
-                    Debug.Log("win");
                     Win();
                 }
             }
@@ -60,6 +56,57 @@ public class GameController : MonoBehaviour
         {
             list.Add(item.Value);
         }
+        HandleTimeCombo();
+    }
+    private void Initialized()
+    {
+        currentTimeRemaining = comboTime;
+        coinCurrent = PlayerPrefs.GetInt(Constants.CoinPlayerPrefs, 0);
+        levelCurrent = PlayerPrefs.GetInt(Constants.LevelPlayerPrefs, 1);
+        MapConfig mapConfig = model.MapConfig.Maps[levelCurrent - 1];
+        view.SetLevelText(mapConfig.DisplayName);
+        view.SetCoinText(coinCurrent);
+        tileSpawner.Initialized(mapConfig.MapDetails);
+        slotCurrentDics = new();
+        for (int i = 0; i < slots.Count; i++)
+        {
+            slotCurrentDics.Add(i, null);
+        }
+        StartCoroutine(Countdown(mapConfig.PlayTime));
+    }
+    private void HandleTimeCombo()
+    {
+        if (currentCombo <= 0) return;
+        currentTimeRemaining -= Time.deltaTime;
+        view.SetFillAmountCombo(Mathf.Clamp01(currentTimeRemaining / comboTime));
+        if (currentTimeRemaining <= 0)
+        {
+            ResetCombo();
+        }
+    }
+    private void ResetCombo()
+    {
+        currentCombo = 0;
+        comboTime = 10f;
+        currentTimeRemaining = comboTime;
+        view.SetFillAmountCombo(1);
+        view.SetStatusActiveCombo(false);
+    }
+    private void ComboCompleted()
+    {
+        view.SetStatusActiveCombo(true);
+        view.SetFillAmountCombo(1);
+        //Increase Combo
+        currentCombo++;
+        //SetCoin
+        coinCurrent += currentCombo;
+        coinInLevel += currentCombo;
+        view.SetCoinText(coinCurrent);
+        PlayerPrefs.SetInt(Constants.CoinPlayerPrefs, coinCurrent);
+        view.SetComboText(currentCombo.ToString());
+        //Update combo time after decrease 5% time 
+        comboTime *= 1f - 0.05f * currentCombo;
+        currentTimeRemaining = comboTime;
     }
     public void SetCanTouch(bool canTouch) => this.canTouch = canTouch;
     protected IEnumerator Countdown(float time)
@@ -118,9 +165,10 @@ public class GameController : MonoBehaviour
     }
     public void Win()
     {
+        view.SetStatusActiveCombo(false);
+        view.SetPopUpWin(levelCurrent, coinInLevel);
         levelCurrent++;
         PlayerPrefs.SetInt(Constants.LevelPlayerPrefs, levelCurrent);
-        view.SetStatusAcitvePopUpWin(true);
     }
     public IEnumerator Match(int index)
     {
@@ -130,6 +178,7 @@ public class GameController : MonoBehaviour
         if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
         {
             yield return new WaitForSeconds(0.4f);
+            ComboCompleted();
             slotCurrentDics[index].OnDespawn();
             slotCurrentDics[index + 1].OnDespawn();
             slotCurrentDics[index + 2].OnDespawn();
@@ -147,14 +196,23 @@ public class GameController : MonoBehaviour
         {
             if (CheckGameOver())
             {
-                view.SetStatusAcitvePopUpLose(true);
+                GameOver();
             }
 
         }
     }
+    private void GameOver()
+    {
+        view.SetStatusActiveCombo(false);
+        view.SetPopUpLose(levelCurrent, coinInLevel);
+    }
     public void ReloadScene()
     {
         SceneManager.LoadScene(Constants.GameplayScene);
+    }
+    public void ChangeHomeScene()
+    {
+        SceneManager.LoadScene(Constants.HomeScene);
     }
     public void Back()
     {

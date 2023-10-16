@@ -11,5 +11,6 @@ public static class Constants
 
     //Scene
     public const string GameplayScene = "Scenes/Game";
+    public const string HomeScene = "Scenes/Home";
 
 }

@@ -7,6 +7,11 @@ namespace GamePlay
 {
     public class GameView : MonoBehaviour
     {
+        [SerializeField] private GameObject addSlot;
+        [SerializeField] private TextMeshProUGUI countDownText;
+        [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private TextMeshProUGUI coinText;
+
         [Header("POPUP WIN")]
         [SerializeField] private GameObject popUpWin;
         [SerializeField] private TextMeshProUGUI levelTextPopUpWin;
@@ -17,15 +22,17 @@ namespace GamePlay
         [SerializeField] private TextMeshProUGUI levelTextPopUpLose;
         [SerializeField] private TextMeshProUGUI ScoreTextPopUpLose;
 
-        [SerializeField] private GameObject addSlot;
-        [SerializeField] private TextMeshProUGUI countDownText;
-        [SerializeField] private TextMeshProUGUI levelText;
-        [SerializeField] private TextMeshProUGUI coinText;
 
         [Header("COMBO")]
         [SerializeField] private Image fillAmountCombo;
         [SerializeField] private GameObject combo;
         [SerializeField] private TextMeshProUGUI comboText;
+
+        [Header("Wall")]
+        [SerializeField] private Transform wallLeft;
+        [SerializeField] private Transform wallForward;
+        [SerializeField] private Transform wallRight;
+        [SerializeField] private Transform wallBottom;
 
         public void SetCountDownText(int minute, int second) => countDownText.text = $"{minute}:{second}";
         public void SetLevelText(string text) => levelText.text = text;
@@ -56,6 +63,13 @@ namespace GamePlay
             popUpLose.SetActive(true);
             levelTextPopUpLose.text = level.ToString();
             ScoreTextPopUpLose.text = score.ToString();
+        }
+        public void SetPosWallWithScreen(float worldHeight, float worldWidth)
+        {
+            wallLeft.position = new Vector3(-worldWidth / 2, wallLeft.position.y, wallLeft.position.z);
+            wallRight.position = new Vector3(worldWidth / 2, wallRight.position.y, wallRight.position.z);
+            wallForward.position = new Vector3(wallRight.position.x, wallRight.position.y, worldHeight / 2);
+            wallBottom.position = new Vector3(wallRight.position.x, wallRight.position.y, -worldHeight / 2);
         }
     }
 }

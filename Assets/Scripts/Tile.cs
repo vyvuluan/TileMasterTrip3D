@@ -39,7 +39,7 @@ public class Tile : MonoBehaviour
     private Vector3 CalculatorScaleX(float scale)
     {
         Vector3 initialScale = transform.localScale;
-        float scaleXRatio = 70f / initialScale.x;
+        float scaleXRatio = scale / initialScale.x;
         float newScaleY = initialScale.y * scaleXRatio;
         float newScaleZ = initialScale.z * scaleXRatio;
         return new Vector3(scale, newScaleY, newScaleZ);

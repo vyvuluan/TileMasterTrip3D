@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 namespace GamePlay
 {
-
     public class GameController : MonoBehaviour
     {
         [Header("MVC")]
@@ -14,19 +13,21 @@ namespace GamePlay
         [SerializeField] private GameView view;
         [Header("Preferences")]
         [SerializeField] private Transform slotAdd;
+        [SerializeField] private Transform slot;
         [SerializeField] private TileSpawner tileSpawner;
         [SerializeField] private List<Transform> slots;
         [SerializeField] private LayerMask layerMaskTile;
         private int levelCurrent;
         private int coinCurrent;
         private int coinInLevel;
+        private float worldHeight;
+        private float worldWidth;
         private bool canTouch = true;
         private bool isCountdownPaused = false;
         private bool isUsingFreezeTime = false;
         private RaycastHit hitInfo;
         private Dictionary<int, Tile> slotCurrentDics;
         public List<Tile> list = new();
-
         #region Variable Combo
         private int currentCombo = 0;
         private float comboTime = 10f;
@@ -36,6 +37,12 @@ namespace GamePlay
         private void Awake()
         {
             Initialized();
+        }
+        private void Start()
+        {
+            //scale with every monitor
+            float value = (slot.localScale.x - 10) / 10;
+            tileSpawner.transform.localScale = new Vector3(value + 1f, value + 1f, value + 1f);
         }
         private void Update()
         {
@@ -63,8 +70,21 @@ namespace GamePlay
             }
             HandleTimeCombo();
         }
+        private Vector3 CalculatorScaleX(float scale, Transform tf)
+        {
+            Vector3 initialScale = tf.localScale;
+            float scaleXRatio = scale / initialScale.x;
+            float newScaleY = initialScale.y * scaleXRatio;
+            float newScaleZ = initialScale.z * scaleXRatio;
+            return new Vector3(scale, newScaleY, newScaleZ);
+        }
         private void Initialized()
         {
+            worldHeight = Camera.main.orthographicSize * 2f;
+            worldWidth = worldHeight * Screen.width / Screen.height;
+            view.SetPosWallWithScreen(worldHeight, worldWidth);
+            //scale with every monitor
+            slot.localScale = CalculatorScaleX(worldWidth - 1.5f, slot);
             Application.targetFrameRate = 60;
             currentTimeRemaining = comboTime;
             coinCurrent = PlayerPrefs.GetInt(Constants.CoinPlayerPrefs, 0);

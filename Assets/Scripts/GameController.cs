@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameModel model;
     [SerializeField] private GameView view;
     [Header("Preferences")]
-    [SerializeField] private Transform tf;
+    [SerializeField] private Transform slotAdd;
     [SerializeField] private TileSpawner tileSpawner;
     [SerializeField] private List<Transform> slots;
     [SerializeField] private LayerMask layerMaskTile;
@@ -169,7 +169,7 @@ public class GameController : MonoBehaviour
             }
         }
     }
-    public void Suggest()
+    public void Hint()
     {
         List<Tile> temp;
         if (slotCurrentDics[0] == null)
@@ -200,5 +200,11 @@ public class GameController : MonoBehaviour
                 Win();
             }
         }
+    }
+    public void AddSlot()
+    {
+        slots.Add(slotAdd);
+        slotCurrentDics.Add(slotCurrentDics.Count, null);
+        view.SetStatusAcitveAddSlot(false);
     }
 }

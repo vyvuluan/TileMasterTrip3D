@@ -5,6 +5,7 @@ public class GameView : MonoBehaviour
 {
     [SerializeField] private GameObject popUpWin;
     [SerializeField] private GameObject popUpLose;
+    [SerializeField] private GameObject addSlot;
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI levelText;
 
@@ -12,4 +13,5 @@ public class GameView : MonoBehaviour
     public void SetLevelText(string text) => levelText.text = text;
     public void SetStatusAcitvePopUpWin(bool status) => popUpWin.SetActive(status);
     public void SetStatusAcitvePopUpLose(bool status) => popUpLose.SetActive(status);
+    public void SetStatusAcitveAddSlot(bool status) => addSlot.SetActive(status);
 }

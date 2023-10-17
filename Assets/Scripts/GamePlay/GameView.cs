@@ -57,6 +57,7 @@ namespace GamePlay
             popUpWin.SetActive(true);
             levelTextPopUpWin.text = level.ToString();
             ScoreTextPopUpWin.text = score.ToString();
+            combo.SetActive(false);
         }
         public void SetPopUpLose(int level, int score)
         {

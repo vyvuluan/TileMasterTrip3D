@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AudioSystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace GamePlay
         private RaycastHit hitInfo;
         private Dictionary<int, Tile> slotCurrentDics;
         public List<Tile> list = new();
+        private AudioController audioController;
         #region Variable Combo
         private int currentCombo = 0;
         private float comboTime = 10f;
@@ -49,9 +51,9 @@ namespace GamePlay
             if (Input.GetMouseButtonDown(0) && canTouch)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
                 if (Physics.Raycast(ray, out hitInfo, 100f, layerMaskTile))
                 {
+                    audioController.AudioService.PlayClicked();
                     canTouch = false;
                     Tile tileTemp = hitInfo.collider.GetComponent<Tile>();
                     tileTemp.SetRollback(hitInfo.collider.transform.position, hitInfo.collider.transform.rotation, SetCanTouch);
@@ -80,6 +82,7 @@ namespace GamePlay
         }
         private void Initialized()
         {
+            audioController = AudioController.Instance;
             worldHeight = Camera.main.orthographicSize * 2f;
             worldWidth = worldHeight * Screen.width / Screen.height;
             view.SetPosWallWithScreen(worldHeight, worldWidth);
@@ -87,8 +90,8 @@ namespace GamePlay
             slot.localScale = CalculatorScaleX(worldWidth - 1.5f, slot);
             Application.targetFrameRate = 60;
             currentTimeRemaining = comboTime;
-            coinCurrent = PlayerPrefs.GetInt(Constants.CoinPlayerPrefs, 0);
-            levelCurrent = PlayerPrefs.GetInt(Constants.LevelPlayerPrefs, 1);
+            coinCurrent = PlayerPrefs.GetInt(Constanst.CoinPlayerPrefs, 0);
+            levelCurrent = PlayerPrefs.GetInt(Constanst.LevelPlayerPrefs, 1);
             MapConfig mapConfig = model.MapConfig.Maps[levelCurrent - 1];
             view.SetLevelText(mapConfig.DisplayName);
             view.SetCoinText(coinCurrent);
@@ -128,7 +131,7 @@ namespace GamePlay
             coinCurrent += currentCombo;
             coinInLevel += currentCombo;
             view.SetCoinText(coinCurrent);
-            PlayerPrefs.SetInt(Constants.CoinPlayerPrefs, coinCurrent);
+            PlayerPrefs.SetInt(Constanst.CoinPlayerPrefs, coinCurrent);
             view.SetComboText(currentCombo.ToString());
             //Update combo time after decrease 5% time 
             comboTime *= 1f - 0.05f * currentCombo;
@@ -193,10 +196,11 @@ namespace GamePlay
         }
         public void Win()
         {
-            view.SetStatusActiveCombo(false);
+            audioController.AudioService.PlayWin();
+            //view.SetStatusActiveCombo(false);
             view.SetPopUpWin(levelCurrent, coinInLevel);
             levelCurrent++;
-            PlayerPrefs.SetInt(Constants.LevelPlayerPrefs, levelCurrent);
+            PlayerPrefs.SetInt(Constanst.LevelPlayerPrefs, levelCurrent);
         }
         public IEnumerator Match(int index)
         {
@@ -205,12 +209,15 @@ namespace GamePlay
             if (slotCurrentDics[index + 1] == null || slotCurrentDics[index + 2] == null) yield break;
             if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
             {
+                audioController.AudioService.PlayMatch();
+                canTouch = false;
                 yield return new WaitForSeconds(0.4f);
                 ComboCompleted();
                 slotCurrentDics[index].OnDespawn();
                 slotCurrentDics[index + 1].OnDespawn();
                 slotCurrentDics[index + 2].OnDespawn();
                 slotCurrentDics[index] = slotCurrentDics[index + 1] = slotCurrentDics[index + 2] = null;
+                canTouch = true;
                 //move the components behind index + 3
                 for (int i = index + 3; i < slots.Count; i++)
                 {
@@ -236,11 +243,11 @@ namespace GamePlay
         }
         public void ReloadScene()
         {
-            SceneManager.LoadScene(Constants.GameplayScene);
+            SceneManager.LoadScene(Constanst.GameplayScene);
         }
         public void ChangeHomeScene()
         {
-            SceneManager.LoadScene(Constants.HomeScene);
+            SceneManager.LoadScene(Constanst.HomeScene);
         }
         #region BOOSTER
         public void Back()

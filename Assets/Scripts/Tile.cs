@@ -13,7 +13,17 @@ public class Tile : MonoBehaviour
     private Vector3 startPos;
     private Quaternion startQuaternion;
     public TileType TileType { get => tileType; }
+    private void FixedUpdate()
+    {
+        Vector3 objectDirection = transform.forward;
+        //Debug.Log(objectDirection);
+        if (objectDirection.y < 0.5f)
+        {
+            objectDirection.y = 0.6f;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(objectDirection), 10f * Time.fixedDeltaTime);
+        }
 
+    }
     public void OnInit(TileType tileType, Sprite sprite)
     {
         this.tileType = tileType;

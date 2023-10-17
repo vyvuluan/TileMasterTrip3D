@@ -20,12 +20,12 @@ MonoBehaviour:
     mapDetails:
     - id: 1
       type: 2
-      sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
-      chance: 6
+      sprite: {fileID: 21300000, guid: c374248a869045644a9170bdd389ce01, type: 3}
+      chance: 3
     - id: 0
       type: 1
       sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
-      chance: 6
+      chance: 3
     - id: 2
       type: 3
       sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}

@@ -194,19 +194,12 @@ namespace GamePlay
             slotCurrentDics[index].Collect(slots[index]);
             StartCoroutine(Match(index));
         }
-        public void Win()
-        {
-            audioController.AudioService.PlayWin();
-            //view.SetStatusActiveCombo(false);
-            view.SetPopUpWin(levelCurrent, coinInLevel);
-            levelCurrent++;
-            PlayerPrefs.SetInt(Constanst.LevelPlayerPrefs, levelCurrent);
-        }
+
         public IEnumerator Match(int index)
         {
             //match
+            if (slotCurrentDics[index] == null || slotCurrentDics[index + 1] == null || slotCurrentDics[index + 2] == null) yield break;
             TileType tileType = slotCurrentDics[index].TileType;
-            if (slotCurrentDics[index + 1] == null || slotCurrentDics[index + 2] == null) yield break;
             if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
             {
                 audioController.AudioService.PlayMatch();
@@ -216,8 +209,9 @@ namespace GamePlay
                 slotCurrentDics[index].OnDespawn();
                 slotCurrentDics[index + 1].OnDespawn();
                 slotCurrentDics[index + 2].OnDespawn();
-                slotCurrentDics[index] = slotCurrentDics[index + 1] = slotCurrentDics[index + 2] = null;
-                canTouch = true;
+                slotCurrentDics[index] = null;
+                slotCurrentDics[index + 1] = null;
+                slotCurrentDics[index + 2] = null;
                 //move the components behind index + 3
                 for (int i = index + 3; i < slots.Count; i++)
                 {
@@ -226,6 +220,7 @@ namespace GamePlay
                     slotCurrentDics[i - 3] = slotCurrentDics[i];
                     slotCurrentDics[i] = null;
                 }
+                //canTouch = true;
             }
             else
             {
@@ -240,6 +235,14 @@ namespace GamePlay
         {
             view.SetStatusActiveCombo(false);
             view.SetPopUpLose(levelCurrent, coinInLevel);
+        }
+        public void Win()
+        {
+            audioController.AudioService.PlayWin();
+            //view.SetStatusActiveCombo(false);
+            view.SetPopUpWin(levelCurrent, coinInLevel);
+            levelCurrent++;
+            PlayerPrefs.SetInt(Constanst.LevelPlayerPrefs, levelCurrent);
         }
         public void ReloadScene()
         {

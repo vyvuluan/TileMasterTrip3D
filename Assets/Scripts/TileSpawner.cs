@@ -14,7 +14,7 @@ public class TileSpawner : MonoBehaviour
         {
             for (int j = 0; j < mapDetail[i].Chance; j++)
             {
-                Vector3 randomPosition = UnityEngine.Random.insideUnitSphere * 5;
+                Vector3 randomPosition = UnityEngine.Random.insideUnitSphere * 8;
                 randomPosition.y = UnityEngine.Random.Range(3, 8);
                 SpawnTile(randomPosition, mapDetail[i].Sprite, mapDetail[i].Type);
             }

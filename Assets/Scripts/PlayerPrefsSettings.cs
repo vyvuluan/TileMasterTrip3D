@@ -4,7 +4,7 @@ namespace UnityEditor
 {
     internal class PlayerPrefsSettings
     {
-        [MenuItem("Window/Clear")]
+        [MenuItem("Tools/Clear")]
         static void ClearPlayerPrefs()
         {
             if (EditorUtility.DisplayDialog("Clear All PlayerPrefs",

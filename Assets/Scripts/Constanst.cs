@@ -13,4 +13,6 @@ public static class Constanst
     public const string GameplayScene = "Scenes/Game";
     public const string HomeScene = "Scenes/Home";
 
+    //Path
+    public const string PathToScriptableObject = "Assets/Scripts/Map.asset";
 }

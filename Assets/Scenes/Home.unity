@@ -176,7 +176,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 9.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -290,10 +290,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 379322895}
-        m_TargetAssemblyTypeName: Home.HomeView, Assembly-CSharp
-        m_MethodName: SetPopUpSetting
-        m_Mode: 6
+      - m_Target: {fileID: 1866932184}
+        m_TargetAssemblyTypeName: Home.HomeController, Assembly-CSharp
+        m_MethodName: CloseSetting
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -452,6 +452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 190687270}
   - component: {fileID: 190687271}
+  - component: {fileID: 190687272}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -533,6 +534,35 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &190687272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190687269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1866932184}
+          m_TargetAssemblyTypeName: Home.HomeController, Assembly-CSharp
+          m_MethodName: EventPointerDownSliderMusic
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &229559604
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,8 +723,8 @@ MonoBehaviour:
   popUpSetting: {fileID: 2083273778}
   levelText: {fileID: 2130267918}
   coinText: {fileID: 1239065606}
-  sound: {fileID: 788881912}
-  music: {fileID: 190687271}
+  sliderSound: {fileID: 788881912}
+  sliderMusic: {fileID: 190687271}
 --- !u!1 &400652953
 GameObject:
   m_ObjectHideFlags: 0
@@ -1511,6 +1541,7 @@ GameObject:
   m_Component:
   - component: {fileID: 788881911}
   - component: {fileID: 788881912}
+  - component: {fileID: 788881913}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -1591,7 +1622,36 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1866932184}
+        m_TargetAssemblyTypeName: Home.HomeController, Assembly-CSharp
+        m_MethodName: EventPointerDownSliderSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &788881913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788881910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &792353527
 GameObject:
   m_ObjectHideFlags: 0
@@ -2668,8 +2728,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - Name: button
-    AudioClip: {fileID: 8300000, guid: 94b4024578a3f1647aeeb86b16da89e7, type: 3}
+  - Name: click
+    AudioClip: {fileID: 8300000, guid: 91067d8f233b42b4bb596ab055038086, type: 3}
+    Volume: 1
+  - Name: match
+    AudioClip: {fileID: 8300000, guid: dd82487b35700d348b93f31aee7fecf5, type: 3}
+    Volume: 1
+  - Name: win
+    AudioClip: {fileID: 8300000, guid: 5808bbf859360d8469adf3e0290163b5, type: 3}
     Volume: 1
   music: {fileID: 792353528}
   musicObject: {fileID: 792353527}

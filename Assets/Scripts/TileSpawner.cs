@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,26 +35,24 @@ public class TileSpawner : MonoBehaviour
     }
     public List<Tile> FindMatchingTiles(int countToMatch, TileType type)
     {
-        List<TileQuantity> temp = new();
-
-        //convect Enum TileType to Array
-        TileType[] values = (TileType[])Enum.GetValues(typeof(TileType));
-        //Init list temp
-        for (int i = 0; i <= (int)values[^1]; i++)
+        Dictionary<TileType, TileQuantity> temp = new();
+        //init dictionary 
+        for (int i = 0; i < mapDetail.Count; i++)
         {
             TileQuantity tileQuanity = new()
             {
                 quantity = 0,
                 tiles = new()
             };
-            temp.Add(tileQuanity);
+            temp.Add(mapDetail[i].Type, tileQuanity);
         }
+
         //find
         for (int i = 0; i < tiles.Count; i++)
         {
             if (tiles[i].TileType != type && countToMatch != 3) continue;
             //update list temp
-            TileQuantity tileQuanity = temp[(int)tiles[i].TileType];
+            TileQuantity tileQuanity = temp[tiles[i].TileType];
             tileQuanity.tiles.Add(tiles[i]);
             tileQuanity.quantity++;
             if (tileQuanity.quantity >= countToMatch)

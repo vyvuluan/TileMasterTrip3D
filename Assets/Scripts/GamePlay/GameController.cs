@@ -28,7 +28,6 @@ namespace GamePlay
         private bool isUsingFreezeTime = false;
         private RaycastHit hitInfo;
         private Dictionary<int, Tile> slotCurrentDics;
-        public List<Tile> list = new();
         private AudioController audioController;
         #region Variable Combo
         private int currentCombo = 0;
@@ -46,6 +45,7 @@ namespace GamePlay
             {
                 audioController = AudioController.Instance;
             }
+            Application.targetFrameRate = 60;
             Initialized();
         }
         private void Start()
@@ -72,11 +72,6 @@ namespace GamePlay
                         Win();
                     }
                 }
-            }
-            list = new();
-            foreach (var item in slotCurrentDics)
-            {
-                list.Add(item.Value);
             }
             HandleTimeCombo();
         }

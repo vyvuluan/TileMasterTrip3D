@@ -42,7 +42,7 @@ MonoBehaviour:
     - id: 0
       type: 0
       sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
-      chance: 7
+      chance: 3
     - id: 1
       type: 1
       sprite: {fileID: 21300000, guid: c374248a869045644a9170bdd389ce01, type: 3}
@@ -69,14 +69,10 @@ MonoBehaviour:
       sprite: {fileID: 21300000, guid: 6ee042c3f319cda4990f5f14a762ff7e, type: 3}
       chance: 4
     - id: 2
-      type: 7
+      type: 3
       sprite: {fileID: 21300000, guid: 4fa3527fa3505934092e0c83285ebdaa, type: 3}
       chance: 4
     - id: 3
       type: 4
       sprite: {fileID: 21300000, guid: 40735cbb11480d94e8228e5ab5da8c61, type: 3}
       chance: 4
-    - id: 4
-      type: 3
-      sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
-      chance: 6

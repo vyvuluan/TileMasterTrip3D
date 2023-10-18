@@ -237,8 +237,8 @@ public class GameSettingWindow : EditorWindow
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(mapDetail.Id.ToString(), GUILayout.Width(100));
             myMapConfigs[index].MapDetails[i].Type = EditorGUILayout.Popup((int)myMapConfigs[index].MapDetails[i].Type, types.ToArray(), GUILayout.Width(100));
-            //myMapConfigs[index].MapDetails[i].Sprite = (Sprite)EditorGUILayout.ObjectField(tileConfigSO.TileTypes[myMapConfigs[index].MapDetails[i].Type].Sprite, typeof(Sprite), false, GUILayout.Width(80), GUILayout.Height(80));
             GUILayout.Box(tileConfigSO.TileTypes[myMapConfigs[index].MapDetails[i].Type].Sprite.texture, GUILayout.Width(100), GUILayout.Height(100));
+            myMapConfigs[index].MapDetails[i].Sprite = tileConfigSO.TileTypes[myMapConfigs[index].MapDetails[i].Type].Sprite;
             myMapConfigs[index].MapDetails[i].Chance = EditorGUILayout.IntField(mapDetail.Chance, GUILayout.Width(80));
             if (GUILayout.Button("x", GUILayout.Width(30)))
             {

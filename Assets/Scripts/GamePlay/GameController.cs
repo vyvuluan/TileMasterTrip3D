@@ -1,5 +1,4 @@
 ﻿using AudioSystem;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +22,7 @@ namespace GamePlay
         private int coinInLevel;
         private float worldHeight;
         private float worldWidth;
+        private bool isMatching = false;
         private bool canTouch = true;
         private bool isCountdownPaused = false;
         private bool isUsingFreezeTime = false;
@@ -38,6 +38,14 @@ namespace GamePlay
 
         private void Awake()
         {
+            if (GameObject.FindGameObjectWithTag(Constanst.SoundTag) == null)
+            {
+                SceneManager.LoadScene(Constanst.EntryScene);
+            }
+            else
+            {
+                audioController = AudioController.Instance;
+            }
             Initialized();
         }
         private void Start()
@@ -48,7 +56,7 @@ namespace GamePlay
         }
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0) && canTouch)
+            if (Input.GetMouseButtonDown(0) && canTouch && !isMatching)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out hitInfo, 100f, layerMaskTile))
@@ -82,7 +90,6 @@ namespace GamePlay
         }
         private void Initialized()
         {
-            audioController = AudioController.Instance;
             worldHeight = Camera.main.orthographicSize * 2f;
             worldWidth = worldHeight * Screen.width / Screen.height;
             view.SetPosWallWithScreen(worldHeight, worldWidth);
@@ -147,13 +154,17 @@ namespace GamePlay
                 {
                     currentTime -= Time.deltaTime;
                 }
-                TimeSpan timeSpan = TimeSpan.FromSeconds(currentTime);
-                int minutes = timeSpan.Minutes;
-                int remainingSeconds = timeSpan.Seconds;
-                view.SetCountDownText(minutes, remainingSeconds);
+                view.SetCountDownText(ConvertTimeToMinutesAndSeconds(currentTime));
                 yield return null;
             }
             view.SetStatusAcitvePopUpLose(true);
+        }
+        private string ConvertTimeToMinutesAndSeconds(float time)
+        {
+            int minutes = Mathf.FloorToInt(time / 60);
+            int seconds = Mathf.FloorToInt(time % 60);
+
+            return $"{minutes}:{seconds}";
         }
         private void HandleCollectTile(Tile tile)
         {
@@ -202,20 +213,22 @@ namespace GamePlay
             int tileType = slotCurrentDics[index].TileType;
             if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
             {
+                isMatching = true;
                 audioController.AudioService.PlayMatch();
                 Tile tile = slotCurrentDics[index];
                 Tile tile1 = slotCurrentDics[index + 1];
                 Tile tile2 = slotCurrentDics[index + 2];
+
                 slotCurrentDics[index] = null;
                 slotCurrentDics[index + 1] = null;
                 slotCurrentDics[index + 2] = null;
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.3f);
                 ComboCompleted();
                 tile.OnDespawn();
                 tile1.OnDespawn();
                 tile2.OnDespawn();
-
                 //move the components behind index + 3
+
                 for (int i = index + 3; i < slots.Count; i++)
                 {
                     if (slotCurrentDics[i] == null) continue;
@@ -223,7 +236,8 @@ namespace GamePlay
                     slotCurrentDics[i - 3] = slotCurrentDics[i];
                     slotCurrentDics[i] = null;
                 }
-                //canTouch = true;
+
+                isMatching = false;
             }
             else
             {
@@ -236,11 +250,14 @@ namespace GamePlay
         }
         private void GameOver()
         {
+            isMatching = true;
+            audioController.AudioService.PlayLose();
             view.SetStatusActiveCombo(false);
             view.SetPopUpLose(levelCurrent, coinInLevel);
         }
         public void Win()
         {
+            isMatching = true;
             audioController.AudioService.PlayWin();
             //view.SetStatusActiveCombo(false);
             view.SetPopUpWin(levelCurrent, coinInLevel);
@@ -249,10 +266,12 @@ namespace GamePlay
         }
         public void ReloadScene()
         {
+            isMatching = true;
             SceneManager.LoadScene(Constanst.GameplayScene);
         }
         public void ChangeHomeScene()
         {
+            isMatching = true;
             SceneManager.LoadScene(Constanst.HomeScene);
         }
         #region BOOSTER
@@ -296,7 +315,6 @@ namespace GamePlay
                 HandleCollectTile(temp[i]);
                 if (tileSpawner.CheckWin())
                 {
-                    Debug.Log("win");
                     Win();
                 }
             }

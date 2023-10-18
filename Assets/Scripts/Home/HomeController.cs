@@ -10,12 +10,20 @@ namespace Home
         private AudioController audioController;
         private void Awake()
         {
+            if (GameObject.FindGameObjectWithTag(Constanst.SoundTag) == null)
+            {
+                SceneManager.LoadScene(Constanst.EntryScene);
+            }
+            else
+            {
+                audioController = AudioController.Instance;
+                view.SetSliderMusic(audioController.GetMusicVolume());
+                view.SetSliderSound(audioController.GetSoundVolume());
+            }
             Application.targetFrameRate = 60;
-            audioController = AudioController.Instance;
             int levelCurrent = PlayerPrefs.GetInt(Constanst.LevelPlayerPrefs, 1);
             int coinCurrent = PlayerPrefs.GetInt(Constanst.CoinPlayerPrefs, 0);
-            view.SetSliderMusic(audioController.GetMusicVolume());
-            view.SetSliderSound(audioController.GetSoundVolume());
+
             view.SetLevelText(levelCurrent);
             view.SetCoinText(coinCurrent);
         }
@@ -32,9 +40,7 @@ namespace Home
         public void Play()
         {
             audioController.AudioService.PlayClicked();
-            DontDestroyOnLoad(audioController.MusicObject);
-            DontDestroyOnLoad(audioController.SoundObject);
-            DontDestroyOnLoad(audioController);
+
             SceneManager.LoadScene(Constanst.GameplayScene);
 
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AudioSystem
 {
@@ -31,6 +32,9 @@ namespace AudioSystem
 
             soundObject = new(soundObjectName);
             //DontDestroyOnLoad(soundObject);
+            DontDestroyOnLoad(musicObject);
+            DontDestroyOnLoad(soundObject);
+            DontDestroyOnLoad(this);
             audioService = new Audio(music, sounds, soundObject)
             {
                 MusicVolume = GetMusicVolume(),
@@ -42,7 +46,6 @@ namespace AudioSystem
             };
 
             audioService.StopMusic();
-            // ------------------------------------------------------------------
 
         }
         public float GetMusicVolume()
@@ -65,7 +68,12 @@ namespace AudioSystem
             //OnSoundVolumeChange?.Invoke(volume);
             audioService.SetSoundVolume(volume);
         }
+        private void Start()
+        {
+            SceneManager.LoadScene(Constanst.HomeScene);
+        }
     }
+
 }
 
 

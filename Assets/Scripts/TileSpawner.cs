@@ -1,37 +1,43 @@
+using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private Transform hat;
     [SerializeField] private List<Tile> tiles;
 
     private List<MapDetail> mapDetail;
-    private void Awake()
-    {
-        tiles = new();
-        for (int i = 0; i < mapDetail.Count; i++)
-        {
-            for (int j = 0; j < mapDetail[i].Chance; j++)
-            {
-                Vector3 randomPosition = UnityEngine.Random.insideUnitSphere * 8;
-                randomPosition.y = UnityEngine.Random.Range(3, 8);
-                SpawnTile(randomPosition, mapDetail[i].Sprite, mapDetail[i].Type);
-            }
-        }
-
-    }
     public void Initialized(List<MapDetail> mapDetail)
     {
         this.mapDetail = mapDetail;
+        hat.gameObject.SetActive(true);
+        tiles = new();
+        hat.DOLocalRotate(new Vector3(0, 360, 0), 1, RotateMode.FastBeyond360)
+            .SetLoops(-1, LoopType.Restart)
+            .SetEase(Ease.Linear);
+        StartCoroutine(SpawnTile());
     }
-    private void SpawnTile(Vector3 position, Sprite sprite, int type)
+    private IEnumerator SpawnTile()
     {
-        GameObject tileGo = SimplePool.Spawn(tilePrefab, position, tilePrefab.transform.rotation);
-        tileGo.transform.SetParent(transform);
-        Tile tile = tileGo.GetComponent<Tile>();
-        tile.OnInit(type, sprite);
-        tiles.Add(tile);
+        for (int i = 0; i < mapDetail.Count; i++)
+        {
+            for (int j = 0; j < mapDetail[i].Chance * 3; j++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                GameObject tileGo = SimplePool.Spawn(tilePrefab, hat.position, hat.rotation);
+                tileGo.transform.SetParent(transform);
+                Tile tile = tileGo.GetComponent<Tile>();
+                tile.OnInit(mapDetail[i].Type, mapDetail[i].Sprite);
+                tile.AddForce(Random.Range(1, 3), hat.forward);
+                tiles.Add(tile);
+            }
+        }
+        hat.gameObject.SetActive(false);
+
+
     }
     public List<Tile> FindMatchingTiles(int countToMatch, int type)
     {

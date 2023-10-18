@@ -16,11 +16,9 @@ public class Tile : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 objectDirection = transform.forward;
-        //Debug.Log(objectDirection);
         if (objectDirection.y < 0.5f)
         {
             objectDirection.y = 0.6f;
-            //objectDirection.z = 1f;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(objectDirection), 10f * Time.fixedDeltaTime);
         }
 
@@ -44,9 +42,10 @@ public class Tile : MonoBehaviour
         boxCol.enabled = false;
         rb.isKinematic = true;
         onChangeCanTouch?.Invoke(false);
-        transform.DOMove(temp, 0.3f).OnComplete(() => onChangeCanTouch?.Invoke(true));
+        if (transform == null) return;
+        transform.DOMove(temp, 0.3f);
         transform.DORotate(new(-90f, -90f, 0), 0.3f);
-        transform.DOScale(CalculatorScaleX(70f), 0.3f);
+        transform.DOScale(CalculatorScaleX(70f), 0.3f).OnComplete(() => onChangeCanTouch?.Invoke(true));
     }
     private Vector3 CalculatorScaleX(float scale)
     {
@@ -71,7 +70,7 @@ public class Tile : MonoBehaviour
         });
         transform.DOScale(CalculatorScaleX(90f), 0.5f);
     }
-    public void AddForce(int force, Vector3 direction)
+    public void AddForce(float force, Vector3 direction)
     {
         rb.AddForce(force * direction, ForceMode.Impulse);
     }

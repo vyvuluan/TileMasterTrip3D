@@ -82,6 +82,15 @@ namespace AudioSystem
                 audioSouce.Play();
             }
         }
+        public void PlayLose()
+        {
+            if (soundOn == true && soundVolume > 0.0f)
+            {
+                var audioSouce = soundAudioSources["lose"];
+                audioSouce.volume = soundVolume * soundVolumes["lose"];
+                audioSouce.Play();
+            }
+        }
 
         // Play Music
         public void PlayMusic()

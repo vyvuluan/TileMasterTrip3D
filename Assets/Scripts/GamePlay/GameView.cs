@@ -34,7 +34,7 @@ namespace GamePlay
         [SerializeField] private Transform wallRight;
         [SerializeField] private Transform wallBottom;
 
-        public void SetCountDownText(int minute, int second) => countDownText.text = $"{minute}:{second}";
+        public void SetCountDownText(string time) => countDownText.text = time;
         public void SetLevelText(string text) => levelText.text = text;
         public void SetStatusAcitvePopUpWin(bool status) => popUpWin.SetActive(status);
         public void SetStatusAcitvePopUpLose(bool status) => popUpLose.SetActive(status);

@@ -1,4 +1,5 @@
 ﻿using AudioSystem;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -262,11 +263,13 @@ namespace GamePlay
         public void ReloadScene()
         {
             isMatching = true;
+            DOTween.KillAll();
             SceneManager.LoadScene(Constanst.GameplayScene);
         }
         public void ChangeHomeScene()
         {
             isMatching = true;
+            DOTween.KillAll();
             SceneManager.LoadScene(Constanst.HomeScene);
         }
         #region BOOSTER

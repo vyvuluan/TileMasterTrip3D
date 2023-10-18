@@ -31,12 +31,12 @@ public class MapConfig
 public class MapDetail
 {
     [SerializeField] private int id;
-    [SerializeField] private TileType type;
+    [SerializeField] private int type;
     [SerializeField] private Sprite sprite;
     [SerializeField] private int chance;
 
     public int Id { get => id; set => id = value; }
-    public TileType Type { get => type; set => type = value; }
+    public int Type { get => type; set => type = value; }
     public Sprite Sprite { get => sprite; set => sprite = value; }
     public int Chance { get => chance; set => chance = value; }
 }

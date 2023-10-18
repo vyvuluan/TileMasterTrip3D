@@ -12,9 +12,12 @@ public class GameSettingWindow : EditorWindow
     private bool onClickTab2 = false;
     private bool onClickDeleteMap = false;
     private List<string> tabMaps;
-    public MapConfigSO mapConfigSO;
-
+    private MapConfigSO mapConfigSO;
+    private TileConfigSO tileConfigSO;
     private List<MapConfig> myMapConfigs;
+    private List<TileConfig> myTileConfigs;
+
+    private List<string> types;
     [MenuItem("Tools/GameSetting")]
     public static void ShowWindow()
     {
@@ -23,6 +26,7 @@ public class GameSettingWindow : EditorWindow
     private void OnEnable()
     {
         ResetMapConfig();
+        ResetTileTypeConfig();
     }
     private void OnGUI()
     {
@@ -43,12 +47,30 @@ public class GameSettingWindow : EditorWindow
             selectedTabMap = GUILayout.Toolbar(selectedTabMap, tabMaps.ToArray());
             LoadSOMap(selectedTabMap);
         }
+        if (onClickTab2)
+        {
+            LoadContentConfigTile();
+        }
     }
     private void ResetMapConfig()
     {
-        mapConfigSO = AssetDatabase.LoadAssetAtPath<MapConfigSO>(Constanst.PathToScriptableObject);
+        mapConfigSO = AssetDatabase.LoadAssetAtPath<MapConfigSO>(Constanst.PathToScriptableObjectMap);
         myMapConfigs = Instantiate(mapConfigSO).Maps.ToList();
 
+    }
+    private void ResetTileTypeConfig()
+    {
+        tileConfigSO = AssetDatabase.LoadAssetAtPath<TileConfigSO>(Constanst.PathToScriptableObjectTileType);
+        myTileConfigs = Instantiate(tileConfigSO).TileTypes.ToList();
+        InitListStringType();
+    }
+    private void InitListStringType()
+    {
+        types = new();
+        for (int i = 0; i < myTileConfigs.Count; i++)
+        {
+            types.Add($"Type {myTileConfigs[i].Type}");
+        }
     }
     private void ConfigMapTab()
     {
@@ -65,10 +87,57 @@ public class GameSettingWindow : EditorWindow
     }
     private void ConfigTileTab()
     {
+        if (tileConfigSO == null) Debug.Log("aaa");
+        else Debug.Log("bbb");
+        tileConfigSO = (TileConfigSO)EditorGUILayout.ObjectField("Tile Config SO", tileConfigSO, typeof(TileConfigSO), false);
+
         // Your content for Tab 2 goes here
         EditorGUILayout.LabelField("Tab 2 Content");
         onClickTab1 = false;
         onClickTab2 = true;
+    }
+    private void LoadContentConfigTile()
+    {
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Save", GUILayout.Width(100)))
+        {
+            SaveTileConfig();
+        }
+        if (GUILayout.Button("Add", GUILayout.Width(100)))
+        {
+            TileConfig temp = new();
+            myTileConfigs.Add(temp);
+
+            myTileConfigs[^1].Sprite = null;
+            myTileConfigs[^1].Type = myTileConfigs[^2].Type + 1;
+            types.Add($"Type {myTileConfigs[^1].Type}");
+        }
+        if (GUILayout.Button("Reload", GUILayout.Width(100)))
+        {
+            ResetTileTypeConfig();
+        }
+        EditorGUILayout.EndHorizontal();
+
+
+        // Draw the table headers
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Type", GUILayout.Width(100));
+        EditorGUILayout.LabelField("Image", GUILayout.Width(100));
+        EditorGUILayout.EndHorizontal();
+
+        // Draw the table rows
+        for (int i = 0; i < myTileConfigs.Count; i++)
+        {
+            TileConfig tileConfigTemp = myTileConfigs[i];
+            EditorGUILayout.BeginHorizontal();
+            tileConfigTemp.Type = EditorGUILayout.Popup(tileConfigTemp.Type, types.ToArray(), GUILayout.Width(100));
+            tileConfigTemp.Sprite = (Sprite)EditorGUILayout.ObjectField(tileConfigTemp.Sprite, typeof(Sprite), false, GUILayout.Width(80), GUILayout.Height(80));
+            if (GUILayout.Button("x", GUILayout.Width(30)))
+            {
+                myTileConfigs.Remove(myTileConfigs[i]);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
     }
     private void SaveLevelConfig()
     {
@@ -77,6 +146,14 @@ public class GameSettingWindow : EditorWindow
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         ResetMapConfig();
+    }
+    private void SaveTileConfig()
+    {
+        tileConfigSO.TileTypes = myTileConfigs;
+        EditorUtility.SetDirty(mapConfigSO);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        ResetTileTypeConfig();
     }
 
     private void LoadSOMap(int index)
@@ -135,8 +212,8 @@ public class GameSettingWindow : EditorWindow
             myMapConfigs[index].MapDetails.Add(temp);
 
             myMapConfigs[index].MapDetails[^1].Id = (myMapConfigs[index].MapDetails[^1] != null) ? myMapConfigs[index].MapDetails[^2].Id + 1 : 0;
-            myMapConfigs[index].MapDetails[^1].Sprite = null;
-            myMapConfigs[index].MapDetails[^1].Type = TileType.TYPE0;
+            myMapConfigs[index].MapDetails[^1].Type = 0;
+            myMapConfigs[index].MapDetails[^1].Sprite = tileConfigSO.TileTypes[0].Sprite;
             myMapConfigs[index].MapDetails[^1].Chance = 1;
         }
         if (GUILayout.Button("Reload", GUILayout.Width(100)))
@@ -152,16 +229,16 @@ public class GameSettingWindow : EditorWindow
         EditorGUILayout.LabelField("Image", GUILayout.Width(100));
         EditorGUILayout.LabelField("Chance", GUILayout.Width(100));
         EditorGUILayout.EndHorizontal();
-
+        InitListStringType();
         // Draw the table rows
         for (int i = 0; i < myMapConfigs[index].MapDetails.Count; i++)
         {
             MapDetail mapDetail = myMapConfigs[index].MapDetails[i];
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(mapDetail.Id.ToString(), GUILayout.Width(100));
-            string[] enumOptions = System.Enum.GetNames(typeof(TileType));
-            myMapConfigs[index].MapDetails[i].Type = (TileType)EditorGUILayout.Popup((int)myMapConfigs[index].MapDetails[i].Type, enumOptions, GUILayout.Width(100));
-            myMapConfigs[index].MapDetails[i].Sprite = (Sprite)EditorGUILayout.ObjectField(mapDetail.Sprite, typeof(Sprite), false, GUILayout.Width(80), GUILayout.Height(80));
+            myMapConfigs[index].MapDetails[i].Type = EditorGUILayout.Popup((int)myMapConfigs[index].MapDetails[i].Type, types.ToArray(), GUILayout.Width(100));
+            //myMapConfigs[index].MapDetails[i].Sprite = (Sprite)EditorGUILayout.ObjectField(tileConfigSO.TileTypes[myMapConfigs[index].MapDetails[i].Type].Sprite, typeof(Sprite), false, GUILayout.Width(80), GUILayout.Height(80));
+            GUILayout.Box(tileConfigSO.TileTypes[myMapConfigs[index].MapDetails[i].Type].Sprite.texture, GUILayout.Width(100), GUILayout.Height(100));
             myMapConfigs[index].MapDetails[i].Chance = EditorGUILayout.IntField(mapDetail.Chance, GUILayout.Width(80));
             if (GUILayout.Button("x", GUILayout.Width(30)))
             {

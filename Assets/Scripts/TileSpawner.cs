@@ -25,7 +25,7 @@ public class TileSpawner : MonoBehaviour
     {
         this.mapDetail = mapDetail;
     }
-    private void SpawnTile(Vector3 position, Sprite sprite, TileType type)
+    private void SpawnTile(Vector3 position, Sprite sprite, int type)
     {
         GameObject tileGo = SimplePool.Spawn(tilePrefab, position, tilePrefab.transform.rotation);
         tileGo.transform.SetParent(transform);
@@ -33,9 +33,9 @@ public class TileSpawner : MonoBehaviour
         tile.OnInit(type, sprite);
         tiles.Add(tile);
     }
-    public List<Tile> FindMatchingTiles(int countToMatch, TileType type)
+    public List<Tile> FindMatchingTiles(int countToMatch, int type)
     {
-        Dictionary<TileType, TileQuantity> temp = new();
+        Dictionary<int, TileQuantity> temp = new();
         //init dictionary 
         for (int i = 0; i < mapDetail.Count; i++)
         {

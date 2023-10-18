@@ -199,7 +199,7 @@ namespace GamePlay
         {
             //match
             if (slotCurrentDics[index] == null || slotCurrentDics[index + 1] == null || slotCurrentDics[index + 2] == null) yield break;
-            TileType tileType = slotCurrentDics[index].TileType;
+            int tileType = slotCurrentDics[index].TileType;
             if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
             {
                 audioController.AudioService.PlayMatch();
@@ -274,7 +274,7 @@ namespace GamePlay
             List<Tile> temp;
             if (slotCurrentDics[0] == null)
             {
-                temp = tileSpawner.FindMatchingTiles(3, TileType.TYPE0);
+                temp = tileSpawner.FindMatchingTiles(3, 0);
             }
             else
             {

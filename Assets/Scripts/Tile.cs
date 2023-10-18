@@ -8,11 +8,11 @@ public class Tile : MonoBehaviour
     [SerializeField] private BoxCollider boxCol;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Image image;
-    [SerializeField] private TileType tileType;
+    [SerializeField] private int tileType;
     private Action<bool> onChangeCanTouch;
     private Vector3 startPos;
     private Quaternion startQuaternion;
-    public TileType TileType { get => tileType; }
+    public int TileType { get => tileType; }
     private void FixedUpdate()
     {
         Vector3 objectDirection = transform.forward;
@@ -25,7 +25,7 @@ public class Tile : MonoBehaviour
         }
 
     }
-    public void OnInit(TileType tileType, Sprite sprite)
+    public void OnInit(int tileType, Sprite sprite)
     {
         this.tileType = tileType;
         image.sprite = sprite;

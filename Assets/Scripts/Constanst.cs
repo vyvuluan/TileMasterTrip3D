@@ -14,5 +14,6 @@ public static class Constanst
     public const string HomeScene = "Scenes/Home";
 
     //Path
-    public const string PathToScriptableObject = "Assets/Scripts/Map.asset";
+    public const string PathToScriptableObjectMap = "Assets/Scripts/Map.asset";
+    public const string PathToScriptableObjectTileType = "Assets/Scripts/TileType.asset";
 }

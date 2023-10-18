@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff9db844587f45469482ed0b7d04b01, type: 3}
+  m_Name: TileType
+  m_EditorClassIdentifier: 
+  tileTypes:
+  - type: 0
+    sprite: {fileID: 21300000, guid: 1b9636d9d2f1bf747b23bf2d6fbe66a5, type: 3}
+  - type: 1
+    sprite: {fileID: 21300000, guid: c374248a869045644a9170bdd389ce01, type: 3}
+  - type: 2
+    sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
+  - type: 3
+    sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
+  - type: 4
+    sprite: {fileID: 21300000, guid: 40735cbb11480d94e8228e5ab5da8c61, type: 3}
+  - type: 5
+    sprite: {fileID: 21300000, guid: 1de7855d5ae5bc2418ca78cce5276b80, type: 3}
+  - type: 6
+    sprite: {fileID: 21300000, guid: 6ee042c3f319cda4990f5f14a762ff7e, type: 3}
+  - type: 7
+    sprite: {fileID: 21300000, guid: 4fa3527fa3505934092e0c83285ebdaa, type: 3}

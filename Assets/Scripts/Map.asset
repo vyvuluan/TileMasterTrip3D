@@ -18,65 +18,44 @@ MonoBehaviour:
     level: 1
     playTime: 400
     mapDetails:
-    - id: 1
-      type: 9
-      sprite: {fileID: 21300000, guid: c374248a869045644a9170bdd389ce01, type: 3}
+    - id: 0
+      type: 0
+      sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
       chance: 3
     - id: 1
       type: 1
-      sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
+      sprite: {fileID: 21300000, guid: c374248a869045644a9170bdd389ce01, type: 3}
       chance: 3
+    - id: 2
+      type: 2
+      sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
+      chance: 5
     - id: 3
       type: 3
       sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
       chance: 5
     - id: 4
-      type: 5
-      sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
-      chance: 5
+      type: 4
+      sprite: {fileID: 21300000, guid: 40735cbb11480d94e8228e5ab5da8c61, type: 3}
+      chance: 1
   - mapName: map2
     displayName: Level 2
     level: 2
     playTime: 400
     mapDetails:
     - id: 0
-      type: 1
+      type: 0
       sprite: {fileID: 21300000, guid: 903cf8173ecce104bb8a63a2b3224675, type: 3}
       chance: 6
     - id: 1
+      type: 1
+      sprite: {fileID: 21300000, guid: c374248a869045644a9170bdd389ce01, type: 3}
+      chance: 6
+    - id: 2
       type: 2
       sprite: {fileID: 21300000, guid: ca5ff513f7cf9fe4187927e0ced516a2, type: 3}
       chance: 6
-    - id: 2
+    - id: 3
       type: 3
       sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
       chance: 6
-    - id: 3
-      type: 4
-      sprite: {fileID: 21300000, guid: 6ee042c3f319cda4990f5f14a762ff7e, type: 3}
-      chance: 6
-    - id: 3
-      type: 5
-      sprite: {fileID: 21300000, guid: 4fa3527fa3505934092e0c83285ebdaa, type: 3}
-      chance: 6
-  - mapName: string
-    displayName: string
-    level: 0
-    playTime: 0
-    mapDetails:
-    - id: 0
-      type: 0
-      sprite: {fileID: 0}
-      chance: 0
-    - id: 1
-      type: 0
-      sprite: {fileID: 0}
-      chance: 1
-    - id: 2
-      type: 0
-      sprite: {fileID: 0}
-      chance: 1
-    - id: 3
-      type: 0
-      sprite: {fileID: 0}
-      chance: 1

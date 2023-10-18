@@ -5,6 +5,10 @@ using UnityEngine;
 public class MapConfigSO : ScriptableObject
 {
     [SerializeField] private List<MapConfig> maps;
+    public MapConfigSO(List<MapConfig> maps)
+    {
+        this.maps = maps;
+    }
 
     public List<MapConfig> Maps { get => maps; set => maps = value; }
 }

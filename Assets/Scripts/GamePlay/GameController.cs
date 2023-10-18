@@ -203,15 +203,18 @@ namespace GamePlay
             if (tileType == slotCurrentDics[index + 1].TileType && tileType == slotCurrentDics[index + 2].TileType)
             {
                 audioController.AudioService.PlayMatch();
-                canTouch = false;
-                yield return new WaitForSeconds(0.4f);
-                ComboCompleted();
-                slotCurrentDics[index].OnDespawn();
-                slotCurrentDics[index + 1].OnDespawn();
-                slotCurrentDics[index + 2].OnDespawn();
+                Tile tile = slotCurrentDics[index];
+                Tile tile1 = slotCurrentDics[index + 1];
+                Tile tile2 = slotCurrentDics[index + 2];
                 slotCurrentDics[index] = null;
                 slotCurrentDics[index + 1] = null;
                 slotCurrentDics[index + 2] = null;
+                yield return new WaitForSeconds(0.4f);
+                ComboCompleted();
+                tile.OnDespawn();
+                tile1.OnDespawn();
+                tile2.OnDespawn();
+
                 //move the components behind index + 3
                 for (int i = index + 3; i < slots.Count; i++)
                 {

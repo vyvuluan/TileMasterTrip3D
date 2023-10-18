@@ -10,6 +10,7 @@ public class GameSettingWindow : EditorWindow
     private string[] tabLabels = { "Map Config", "Tile Config" };
     private bool onClickTab1 = false;
     private bool onClickTab2 = false;
+    private bool onClickDeleteMap = false;
     private List<string> tabMaps;
     public MapConfigSO mapConfigSO;
 
@@ -45,8 +46,9 @@ public class GameSettingWindow : EditorWindow
     }
     private void ResetMapConfig()
     {
-        mapConfigSO = mapConfigSO = AssetDatabase.LoadAssetAtPath<MapConfigSO>(Constanst.PathToScriptableObject);
-        myMapConfigs = mapConfigSO.Maps.ToList();
+        mapConfigSO = AssetDatabase.LoadAssetAtPath<MapConfigSO>(Constanst.PathToScriptableObject);
+        myMapConfigs = Instantiate(mapConfigSO).Maps.ToList();
+
     }
     private void ConfigMapTab()
     {
@@ -55,9 +57,9 @@ public class GameSettingWindow : EditorWindow
         tabMaps = new();
         onClickTab1 = true;
         onClickTab2 = false;
-        for (int i = 0; i < mapConfigSO.Maps.Count; i++)
+        for (int i = 0; i < myMapConfigs.Count; i++)
         {
-            tabMaps.Add(mapConfigSO.Maps[i].MapName);
+            tabMaps.Add(myMapConfigs[i].MapName);
         }
 
     }
@@ -79,29 +81,46 @@ public class GameSettingWindow : EditorWindow
 
     private void LoadSOMap(int index)
     {
-        GUILayout.Label("Custom Table", EditorStyles.boldLabel);
-
-        // Add a button to add a new row
-        if (GUILayout.Button("Add Row"))
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Add New Map"))
         {
-            //data.Add(new CustomData());
+            MapConfig mapConfigTemp = new();
+            mapConfigTemp.MapName = "string";
+            mapConfigTemp.DisplayName = "string";
+            mapConfigTemp.MapDetails = new();
+            mapConfigTemp.PlayTime = 0;
+            myMapConfigs.Add(mapConfigTemp);
         }
+        if (GUILayout.Button("Delete Map"))
+        {
+            myMapConfigs.RemoveAt(index);
+            tabMaps.RemoveAt(index);
 
+            selectedTabMap = 0;
+            ConfigMapTab();
+            onClickDeleteMap = true;
+        }
+        else
+        {
+            onClickDeleteMap = false;
+        }
+        EditorGUILayout.EndHorizontal();
+        if (onClickDeleteMap) return;
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Name", GUILayout.Width(100));
-        myMapConfigs[index].MapName = EditorGUILayout.TextField(mapConfigSO.Maps[index].MapName, GUILayout.Width(100));
+        myMapConfigs[index].MapName = EditorGUILayout.TextField(myMapConfigs[index].MapName, GUILayout.Width(100));
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Display Name", GUILayout.Width(100));
-        myMapConfigs[index].DisplayName = EditorGUILayout.TextField(mapConfigSO.Maps[index].DisplayName, GUILayout.Width(100));
+        myMapConfigs[index].DisplayName = EditorGUILayout.TextField(myMapConfigs[index].DisplayName, GUILayout.Width(100));
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Level", GUILayout.Width(100));
-        myMapConfigs[index].Level = EditorGUILayout.IntField(mapConfigSO.Maps[index].Level, GUILayout.Width(100));
+        myMapConfigs[index].Level = EditorGUILayout.IntField(myMapConfigs[index].Level, GUILayout.Width(100));
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Play Time (s)", GUILayout.Width(100));
-        myMapConfigs[index].PlayTime = EditorGUILayout.IntField((int)mapConfigSO.Maps[index].PlayTime, GUILayout.Width(100));
+        myMapConfigs[index].PlayTime = EditorGUILayout.IntField((int)myMapConfigs[index].PlayTime, GUILayout.Width(100));
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -112,11 +131,17 @@ public class GameSettingWindow : EditorWindow
         if (GUILayout.Button("Add", GUILayout.Width(100)))
         {
             MapDetail temp = new();
-            temp.Id = myMapConfigs[index].MapDetails[^1].Id++;
-            temp.Sprite = myMapConfigs[index].MapDetails[^1].Sprite;
-            temp.Type = myMapConfigs[index].MapDetails[^1].Type;
-            temp.Chance = myMapConfigs[index].MapDetails[^1].Chance;
+            Debug.Log(index);
             myMapConfigs[index].MapDetails.Add(temp);
+
+            myMapConfigs[index].MapDetails[^1].Id = (myMapConfigs[index].MapDetails[^1] != null) ? myMapConfigs[index].MapDetails[^2].Id + 1 : 0;
+            myMapConfigs[index].MapDetails[^1].Sprite = null;
+            myMapConfigs[index].MapDetails[^1].Type = TileType.TYPE0;
+            myMapConfigs[index].MapDetails[^1].Chance = 1;
+        }
+        if (GUILayout.Button("Reload", GUILayout.Width(100)))
+        {
+            ResetMapConfig();
         }
         EditorGUILayout.EndHorizontal();
 
@@ -125,7 +150,7 @@ public class GameSettingWindow : EditorWindow
         EditorGUILayout.LabelField("Id", GUILayout.Width(100));
         EditorGUILayout.LabelField("Type", GUILayout.Width(100));
         EditorGUILayout.LabelField("Image", GUILayout.Width(100));
-        EditorGUILayout.LabelField("Quantity", GUILayout.Width(100));
+        EditorGUILayout.LabelField("Chance", GUILayout.Width(100));
         EditorGUILayout.EndHorizontal();
 
         // Draw the table rows
@@ -133,15 +158,13 @@ public class GameSettingWindow : EditorWindow
         {
             MapDetail mapDetail = myMapConfigs[index].MapDetails[i];
             EditorGUILayout.BeginHorizontal();
-            //EditorGUILayout.TextField(mapDetail.Id.ToString(), GUILayout.Width(100));
             EditorGUILayout.LabelField(mapDetail.Id.ToString(), GUILayout.Width(100));
             string[] enumOptions = System.Enum.GetNames(typeof(TileType));
             myMapConfigs[index].MapDetails[i].Type = (TileType)EditorGUILayout.Popup((int)myMapConfigs[index].MapDetails[i].Type, enumOptions, GUILayout.Width(100));
             myMapConfigs[index].MapDetails[i].Sprite = (Sprite)EditorGUILayout.ObjectField(mapDetail.Sprite, typeof(Sprite), false, GUILayout.Width(80), GUILayout.Height(80));
             myMapConfigs[index].MapDetails[i].Chance = EditorGUILayout.IntField(mapDetail.Chance, GUILayout.Width(80));
-            if (GUILayout.Button("Delete", GUILayout.Width(100)))
+            if (GUILayout.Button("x", GUILayout.Width(30)))
             {
-                Debug.Log("Button clicked for row " + i);
                 myMapConfigs[index].MapDetails.Remove(myMapConfigs[index].MapDetails[i]);
             }
             EditorGUILayout.EndHorizontal();

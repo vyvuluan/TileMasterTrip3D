@@ -70,7 +70,7 @@ MonoBehaviour:
       chance: 4
     - id: 2
       type: 3
-      sprite: {fileID: 21300000, guid: 4fa3527fa3505934092e0c83285ebdaa, type: 3}
+      sprite: {fileID: 21300000, guid: 4bd4aad60c831ca488dd39aeb9db7def, type: 3}
       chance: 4
     - id: 3
       type: 4
